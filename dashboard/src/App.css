@@ -1,3 +1,8 @@
+html, body {
+  height: 100%;
+  background-color: #fff;
+}
+
 .App {
   text-align: center;
 }
@@ -9,7 +14,7 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
+  height: 70px;
   padding: 20px;
   color: white;
 }
@@ -22,7 +27,17 @@
   font-size: large;
 }
 
+div#problem {
+  animation: problem-indicator infinite 4s linear;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@keyframes problem-indicator {
+  0% { background-color: #f44336 }
+  50% { background-color: #ffebee }
+  100% { background-color: #f44336 }
 }
