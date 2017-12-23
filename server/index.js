@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {graphqlExpress, graphiqlExpress} = require('apollo-server-express');
 const {makeExecutableSchema} = require('graphql-tools');
+const helmet = require('helmet')
 
 let debugMode = false;
 
@@ -43,6 +44,7 @@ const schema = makeExecutableSchema({
 
 // Initialize the app
 const app = express();
+app.use(helmet());
 
 // The GraphQL endpoint
 app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
