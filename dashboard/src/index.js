@@ -7,5 +7,5 @@ import registerServiceWorker from './registerServiceWorker';
 
 injectTapEventPlugin();
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
 registerServiceWorker();
