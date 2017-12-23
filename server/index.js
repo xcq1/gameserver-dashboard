@@ -8,7 +8,7 @@ let debugMode = false;
 process.argv.filter((val, i) => i > 1).forEach((val, i) => {
     if (val.indexOf("-debug") !== -1) {
         debugMode = true;
-        console.log('Go to http://localhost:3000/graphiql to run queries!');
+        console.log('Go to http://localhost:3001/graphiql to run queries!');
     }
 });
 
@@ -53,6 +53,6 @@ if (debugMode) {
 }
 
 // Start the server
-app.listen(3000, () => {
+app.listen(3001, () => {
     console.log('Server up');
 });
