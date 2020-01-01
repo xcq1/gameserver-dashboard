@@ -33,7 +33,7 @@ let theme = {
 };
 
 export const App = () => {
-    const {data, loading, error} = useQuery(GET_SERVERS);
+    const {data, loading, error} = useQuery(GET_SERVERS, {pollInterval: 60000});
     if (error) {
         return <p>{error.name} during GraphQL Query: {error.message}</p>;
     }

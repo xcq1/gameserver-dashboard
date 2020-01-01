@@ -69,6 +69,9 @@ const startServer = (obj, args) => {
     const server = getServer(args.serverName);
     if (server !== undefined) {
         server.status = "STARTING";
+        setTimeout(() => {
+            server.status = "RUNNING";
+        }, 10000);
         return server;
     }
     return undefined
@@ -78,6 +81,9 @@ const stopServer = (obj, args) => {
     const server = getServer(args.serverName);
     if (server !== undefined) {
         server.status = "STOPPING";
+        setTimeout(() => {
+            server.status = "STOPPED";
+        }, 10000);
         return server;
     }
     return undefined
