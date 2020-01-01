@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-RUN apk --no-cache add curl
+RUN apk --no-cache add curl docker
 
 WORKDIR /usr/src/app/server
 COPY server/package.json .
