@@ -1,6 +1,7 @@
 const {schema} = require("./schema");
 
 const express = require('express');
+const basicAuth = require('express-basic-auth');
 const bodyParser = require('body-parser');
 const {graphqlExpress, graphiqlExpress} = require('apollo-server-express');
 const helmet = require('helmet');
@@ -17,10 +18,17 @@ process.argv.filter((val, i) => i > 1).forEach((val) => {
 
 // Initialize the app
 const app = express();
-app.use(helmet());
-if (debugMode) {
-    app.use(cors());
+
+if (!debugMode) {
+    app.use(basicAuth({
+        users: { 'admin': process.env.BASIC_AUTH || Math.random().toString(36).substring(2, 15)},
+        challenge: true
+    }));
+} else {
+    app.use(cors()); // enables *
 }
+app.use(helmet());
+app.use(express.static("public"));
 
 // The GraphQL endpoint
 app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));

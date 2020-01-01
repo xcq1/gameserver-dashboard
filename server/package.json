@@ -4,6 +4,7 @@
     "body-parser": "^1.18.2",
     "cors": "^2.8.5",
     "express": "^4.16.2",
+    "express-basic-auth": "^1.2.0",
     "graphql": "^0.12.3",
     "graphql-tools": "^2.14.1",
     "helmet": "^3.9.0"
