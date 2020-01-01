@@ -65,7 +65,7 @@ export const ServerTableRow = ({state, name, ports, link, onStart, onStop}) => {
             <RaisedButton label="Stop" secondary={true} disabled={!canStop} style={{margin: "8px"}} onClick={stop}/>
             {isProgress && <CircularProgress size={40} thickness={7} style={{verticalAlign: "middle"}}/>}
         </TableRowColumn>
-        <TableRowColumn>{ports.map(it => `${it.protocol}: ${it.number}`)}</TableRowColumn>
+        <TableRowColumn>{ports.map(it => `${it.protocol}: ${it.number}\n`)}</TableRowColumn>
         <TableRowColumn>{link}</TableRowColumn>
         <TableRowColumn>
             <RaisedButton label="Envs" style={{margin: "8px"}} disabled={true}/>

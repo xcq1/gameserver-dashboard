@@ -1,3 +1,5 @@
+const resolvers = require("./resolvers");
+
 const {makeExecutableSchema} = require('graphql-tools');
 
 // The GraphQL schema in string form
@@ -47,59 +49,5 @@ const typeDefs = `
 
 `;
 
-// Some fake data
-const servers = [
-    {
-        id: "TestServer",
-        status: "RUNNING",
-        ports: [{
-            protocol: "TCP",
-            number: 8080,
-        }],
-        link: "http://example.com",
-        envs: ["A=B", "C=D"],
-        logs: "Everything\nis\nfine",
-    }
-];
-
-const getServer = (id) => servers.find((e) => (e.id === id));
-
-
-const startServer = (obj, args) => {
-    const server = getServer(args.serverName);
-    if (server !== undefined) {
-        server.status = "STARTING";
-        setTimeout(() => {
-            server.status = "RUNNING";
-        }, 10000);
-        return server;
-    }
-    return undefined
-};
-
-const stopServer = (obj, args) => {
-    const server = getServer(args.serverName);
-    if (server !== undefined) {
-        server.status = "STOPPING";
-        setTimeout(() => {
-            server.status = "STOPPED";
-        }, 10000);
-        return server;
-    }
-    return undefined
-};
-
-// The resolvers
-const resolvers = {
-    Query: {
-        servers: () => servers,
-        server: (obj, args) => getServer(args.name)
-    },
-    Mutation: {
-        startServer,
-        stopServer
-    }
-};
-
 // Put together a schema
-exports.schema = makeExecutableSchema({typeDefs, resolvers});
+exports.schema = makeExecutableSchema({typeDefs, resolvers: resolvers.resolvers});
