@@ -7,17 +7,17 @@ const typeDefs = `
         query: Query
         mutation: Mutation
     }
-    
+
     type Query {
         servers: [Server]
         server(name: String): Server
     }
-    
+
     type Server {
-        name: String,
-        status: ServerState,
-        ports: [Port],
-        link: String,
+        id: String!,
+        status: ServerState!,
+        ports: [Port]!,
+        link: String!,
         envs: [String],
         logs: String
     }
@@ -39,35 +39,37 @@ const typeDefs = `
         TCP
         UDP
     }
-    
+
     type Mutation {
-        startServer(serverName: String): ServerState
-        stopServer(serverName: String): ServerState
+        startServer(serverName: String): Server
+        stopServer(serverName: String): Server
     }
+
 `;
 
 // Some fake data
 const servers = [
     {
-        name: "TestServer",
+        id: "TestServer",
         status: "RUNNING",
         ports: [{
             protocol: "TCP",
             number: 8080,
         }],
         link: "http://example.com",
-        envs: ["A=B","C=D"],
+        envs: ["A=B", "C=D"],
         logs: "Everything\nis\nfine",
     }
 ];
 
-const getServer = (name) => servers.find((e) => (e.name === name));
+const getServer = (id) => servers.find((e) => (e.id === id));
 
 
 const startServer = (obj, args) => {
     const server = getServer(args.serverName);
     if (server !== undefined) {
-        return server.status = "STARTING"
+        server.status = "STARTING";
+        return server;
     }
     return undefined
 };
@@ -75,7 +77,8 @@ const startServer = (obj, args) => {
 const stopServer = (obj, args) => {
     const server = getServer(args.serverName);
     if (server !== undefined) {
-        return server.status = "STOPPING"
+        server.status = "STOPPING";
+        return server;
     }
     return undefined
 };

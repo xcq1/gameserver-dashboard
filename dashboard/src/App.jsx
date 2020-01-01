@@ -6,10 +6,10 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow,} from 'mater
 import {blue500, blue700, darkBlack, fullBlack, grey100, grey300, grey400, grey500, pinkA400, white,} from 'material-ui/styles/colors';
 import {fade} from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
-import {ServerTableRow} from "./ServerTableRow";
+import {ServerTableRow} from "./components/ServerTableRow";
 import {useQuery} from "@apollo/react-hooks";
 import CircularProgress from "material-ui/CircularProgress";
-import {GET_SERVERS} from "./getServers";
+import {GET_SERVERS} from "./graphql/getServers";
 
 let theme = {
     spacing: spacing,
@@ -56,12 +56,12 @@ export const App = () => {
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}>
 
-                        {loading && <CircularProgress size={40} thickness={7} style={{verticalAlign: "middle"}}/>}
+                        {loading && <CircularProgress size={100} thickness={7} style={{verticalAlign: "middle"}}/>}
 
                         {data && data.servers && data.servers.map(it =>
-                            <ServerTableRow key={it.name}
+                            <ServerTableRow key={it.id}
                                             state={it.status}
-                                            name={it.name}
+                                            name={it.id}
                                             ports={it.ports}
                                             link={it.link}
                             />)}
