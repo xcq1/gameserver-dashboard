@@ -7,6 +7,7 @@ import {blue, blueGrey, lightBlue, red, yellow} from "@material-ui/core/colors";
 import {useMutation} from "@apollo/react-hooks";
 import {START_SERVER} from "../graphql/startServer";
 import {STOP_SERVER} from "../graphql/stopServer";
+import Link from "@material-ui/core/Link";
 
 const colors = {
     running: blue[300],
@@ -66,7 +67,7 @@ export const ServerTableRow = ({state, name, ports, link}) => {
             {isProgress && <CircularProgress size={40} thickness={7} style={{verticalAlign: "middle"}}/>}
         </TableCell>
         <TableCell>{ports.map(it => `${it.protocol}: ${it.number}\n`)}</TableCell>
-        <TableCell>{link}</TableCell>
+        <TableCell><Link href={link}>{link}</Link></TableCell>
         <TableCell>
             <Button variant="contained" style={{margin: "0 8px"}} disabled={true}>Envs</Button>
             <Button variant="contained" style={{margin: "0 8px"}} disabled={true}>Logs</Button>
