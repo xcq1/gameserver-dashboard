@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {graphqlExpress, graphiqlExpress} = require('apollo-server-express');
 const helmet = require('helmet');
+const cors = require('cors');
 
 let debugMode = false;
 
@@ -17,6 +18,7 @@ process.argv.filter((val, i) => i > 1).forEach((val) => {
 // Initialize the app
 const app = express();
 app.use(helmet());
+app.use(cors());
 
 // The GraphQL endpoint
 app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));

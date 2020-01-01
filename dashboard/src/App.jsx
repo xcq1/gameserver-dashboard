@@ -1,32 +1,15 @@
-import React, {Component} from 'react';
+import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import RaisedButton from 'material-ui/RaisedButton';
 import './App.css';
-import {
-    Table,
-    TableBody,
-    TableHeader,
-    TableHeaderColumn,
-    TableRow,
-    TableRowColumn,
-} from 'material-ui/Table';
-import CircularProgress from 'material-ui/CircularProgress';
-import Chip from 'material-ui/Chip';
-import {
-    blue500, blue700, blue300,
-    red500, pinkA400, blueGrey300,
-    grey100, grey300, grey400, grey500,
-    white, darkBlack, fullBlack,
-} from 'material-ui/styles/colors';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow,} from 'material-ui/Table';
+import {blue500, blue700, darkBlack, fullBlack, grey100, grey300, grey400, grey500, pinkA400, white,} from 'material-ui/styles/colors';
 import {fade} from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
-
-let x = () => alert("NOPE");
-let y = () => {
-    alert("yeah");
-    return false
-};
+import {ServerTableRow} from "./ServerTableRow";
+import {useQuery} from "@apollo/react-hooks";
+import CircularProgress from "material-ui/CircularProgress";
+import {GET_SERVERS} from "./getServers";
 
 let theme = {
     spacing: spacing,
@@ -49,99 +32,45 @@ let theme = {
     }
 };
 
-let colors = {
-    running: blue300,
-    stopped: blueGrey300,
-    problem: red500,
-}
-
-class App extends Component {
-
-    render() {
-        return (
-            <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-                <div className="App">
-                    <header className="App-header">
-                        <h1 className="App-title">Gameserver Dashboard</h1>
-                    </header>
-                    <Table selectable={false} style={{tableLayout: 'auto'}} fixedHeader={false}>
-                        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                            <TableRow>
-                                <TableHeaderColumn>Status</TableHeaderColumn>
-                                <TableHeaderColumn>Name</TableHeaderColumn>
-                                <TableHeaderColumn style={{paddingLeft: "30px"}}>Actions</TableHeaderColumn>
-                                <TableHeaderColumn>Ports</TableHeaderColumn>
-                                <TableHeaderColumn>Link</TableHeaderColumn>
-                                <TableHeaderColumn style={{paddingLeft: "30px"}}>Settings</TableHeaderColumn>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody displayRowCheckbox={false}>
-
-                            <TableRow onClick={x}>
-                                <TableRowColumn>
-                                    <Chip backgroundColor={colors.problem} id="problem">Problem</Chip>
-                                </TableRowColumn>
-                                <TableRowColumn>
-                                    <span style={{fontSize: "1.25em"}}>ark_ragnarok</span>
-                                </TableRowColumn>
-                                <TableRowColumn>
-                                    <RaisedButton label="Start" primary={true} disabled={true} style={{margin: "8px"}} onClick={y}/>
-                                    <RaisedButton label="Stop" secondary={true} disabled={true} style={{margin: "8px"}}/>
-                                    <CircularProgress size={40} thickness={7} style={{verticalAlign: "middle"}}/>
-                                </TableRowColumn>
-                                <TableRowColumn>7777, 7778, 27015</TableRowColumn>
-                                <TableRowColumn>https://.../</TableRowColumn>
-                                <TableRowColumn>
-                                    <RaisedButton label="Envs" style={{margin: "8px"}} onClick={y}/>
-                                    <RaisedButton label="Logs" style={{margin: "8px"}} onClick={y}/>
-                                </TableRowColumn>
-                            </TableRow>
-
-                            <TableRow onClick={x}>
-                                <TableRowColumn>
-                                    <Chip backgroundColor={colors.running}>Running</Chip>
-                                </TableRowColumn>
-                                <TableRowColumn>
-                                    <span style={{fontSize: "1.25em"}}>ark_island</span>
-                                </TableRowColumn>
-                                <TableRowColumn>
-                                    <RaisedButton label="Start" primary={true} disabled={true} style={{margin: "8px"}} onClick={y}/>
-                                    <RaisedButton label="Stop" secondary={true} style={{margin: "8px"}}/>
-                                    <CircularProgress size={40} thickness={0} style={{verticalAlign: "middle"}}/>
-                                </TableRowColumn>
-                                <TableRowColumn>7777, 7778, 27015</TableRowColumn>
-                                <TableRowColumn>https://.../</TableRowColumn>
-                                <TableRowColumn>
-                                    <RaisedButton label="Envs" style={{margin: "8px"}} onClick={y}/>
-                                    <RaisedButton label="Logs" style={{margin: "8px"}} onClick={y}/>
-                                </TableRowColumn>
-                            </TableRow>
-
-                            <TableRow onClick={x}>
-                                <TableRowColumn>
-                                    <Chip backgroundColor={colors.stopped}>Stopped</Chip>
-                                </TableRowColumn>
-                                <TableRowColumn>
-                                    <span style={{fontSize: "1.25em"}}>ark_abberation</span>
-                                </TableRowColumn>
-                                <TableRowColumn>
-                                    <RaisedButton label="Start" primary={true} style={{margin: "8px"}} onClick={y}/>
-                                    <RaisedButton label="Stop" secondary={true} disabled={true} style={{margin: "8px"}}/>
-                                    <CircularProgress size={40} thickness={0} style={{verticalAlign: "middle"}}/>
-                                </TableRowColumn>
-                                <TableRowColumn>7777, 7778, 27015</TableRowColumn>
-                                <TableRowColumn>https://.../</TableRowColumn>
-                                <TableRowColumn>
-                                    <RaisedButton label="Envs" style={{margin: "8px"}} onClick={y}/>
-                                    <RaisedButton label="Logs" style={{margin: "8px"}} onClick={y}/>
-                                </TableRowColumn>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </div>
-            </MuiThemeProvider>
-        );
+export const App = () => {
+    const {data, loading, error} = useQuery(GET_SERVERS);
+    if (error) {
+        return <p>{error.name} during GraphQL Query: {error.message}</p>;
     }
-}
+    return (
+        <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
+            <div className="App">
+                <header className="App-header">
+                    <h1 className="App-title">Gameserver Dashboard</h1>
+                </header>
+                <Table selectable={false} style={{tableLayout: 'auto'}} fixedHeader={false}>
+                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                        <TableRow>
+                            <TableHeaderColumn>Status</TableHeaderColumn>
+                            <TableHeaderColumn>Name</TableHeaderColumn>
+                            <TableHeaderColumn style={{paddingLeft: "30px"}}>Actions</TableHeaderColumn>
+                            <TableHeaderColumn>Ports</TableHeaderColumn>
+                            <TableHeaderColumn>Link</TableHeaderColumn>
+                            <TableHeaderColumn style={{paddingLeft: "30px"}}>Settings</TableHeaderColumn>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody displayRowCheckbox={false}>
+
+                        {loading && <CircularProgress size={40} thickness={7} style={{verticalAlign: "middle"}}/>}
+
+                        {data && data.servers && data.servers.map(it =>
+                            <ServerTableRow key={it.name}
+                                            state={it.status}
+                                            name={it.name}
+                                            ports={it.ports}
+                                            link={it.link}
+                            />)}
+
+                    </TableBody>
+                </Table>
+            </div>
+        </MuiThemeProvider>
+    );
+};
 
 export default App;

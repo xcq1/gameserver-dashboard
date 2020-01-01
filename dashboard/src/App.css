@@ -27,8 +27,8 @@ html, body {
     font-size: large;
 }
 
-div#problem {
-    animation: problem-indicator infinite 4s linear;
+div.flash-progress {
+    animation: flash-progress infinite 4s linear;
 }
 
 @keyframes App-logo-spin {
@@ -40,14 +40,13 @@ div#problem {
     }
 }
 
-@keyframes problem-indicator {
+@keyframes flash-progress {
     0% {
-        background-color: #f44336
     }
     50% {
-        background-color: #ffebee
+        background-color: #eeeeee
     }
     100% {
-        background-color: #f44336
     }
 }
+
