@@ -30,14 +30,14 @@ const getAllServers = async () => {
             let state = 'PROBLEM';
             if (rawState.includes('exited')) {
                 state = 'STOPPED';
-            } else if (rawState.includes('up') && !rawState.includes('unhealthy')) {
-                state = 'RUNNING';
             } else if (rawState.includes('starting') || rawState.includes('created')) {
                 // probably very rarely occurs
                 state = 'STARTING';
             } else if (rawState.includes('stopping')) {
                 // probably never occurs
                 state = 'STOPPING';
+            } else if (rawState.includes('up') && !rawState.includes('unhealthy')) {
+                state = 'RUNNING';
             }
             const ports = Array.from(params[2].matchAll(PORT_REGEXP), it => ({protocol: it[2].toUpperCase(), number: it[1]}));
             const tcpPort = ports.find(it => it.protocol === 'TCP');

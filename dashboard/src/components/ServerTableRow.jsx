@@ -1,22 +1,22 @@
 import React from 'react';
-import {TableRow, TableRowColumn} from "material-ui/Table";
-import Chip from "material-ui/Chip";
-import RaisedButton from "material-ui/RaisedButton";
-import CircularProgress from "material-ui/CircularProgress";
-import {blue300, blueGrey300, lightBlue300, red500, yellow300} from "material-ui/styles/colors";
+import {TableCell, TableRow} from "@material-ui/core";
+import Chip from "@material-ui/core/Chip";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import {blue, blueGrey, lightBlue, red, yellow} from "@material-ui/core/colors";
 import {useMutation} from "@apollo/react-hooks";
 import {START_SERVER} from "../graphql/startServer";
 import {STOP_SERVER} from "../graphql/stopServer";
 
 const colors = {
-    running: blue300,
-    stopped: blueGrey300,
-    problem: red500,
-    starting: lightBlue300,
-    stopping: yellow300
+    running: blue[300],
+    stopped: blueGrey[300],
+    problem: red[500],
+    starting: lightBlue[300],
+    stopping: yellow[300]
 };
 
-export const ServerTableRow = ({state, name, ports, link, onStart, onStop}) => {
+export const ServerTableRow = ({state, name, ports, link}) => {
     let chip = undefined;
     let canStart = false;
     let canStop = false;
@@ -25,51 +25,51 @@ export const ServerTableRow = ({state, name, ports, link, onStart, onStop}) => {
     switch (state) {
         default:
         case 'PROBLEM':
-            chip = <Chip backgroundColor={colors.problem} className="flash-progress">Problem</Chip>;
+            chip = <Chip style={{backgroundColor: colors.problem}} className="flash-progress" label="Problem"/>;
             isProgress = true;
             break;
         case 'STOPPED':
-            chip = <Chip backgroundColor={colors.stopped}>Stopped</Chip>;
+            chip = <Chip style={{backgroundColor: colors.stopped}} label="Stopped"/>;
             canStart = true;
             break;
         case 'STARTING':
-            chip = <Chip backgroundColor={colors.starting} className="flash-progress">Starting</Chip>;
+            chip = <Chip style={{backgroundColor: colors.starting}} className="flash-progress" label="Starting"/>;
             isProgress = true;
             break;
         case 'RUNNING':
-            chip = <Chip backgroundColor={colors.running}>Running</Chip>;
+            chip = <Chip style={{backgroundColor: colors.running}} label="Running"/>;
             canStop = true;
             break;
         case 'STOPPING':
-            chip = <Chip backgroundColor={colors.stopping} className="flash-progress">Stopping</Chip>;
+            chip = <Chip style={{backgroundColor: colors.stopping}} className="flash-progress" label="Stopping"/>;
             isProgress = true;
             break;
     }
 
-    const [start, {startData}] = useMutation(START_SERVER, {
+    const [start] = useMutation(START_SERVER, {
         variables: {name}
     });
-    const [stop, {stopData}] = useMutation(STOP_SERVER, {
+    const [stop] = useMutation(STOP_SERVER, {
         variables: {name}
     });
 
     return <TableRow>
-        <TableRowColumn>
+        <TableCell>
             {chip}
-        </TableRowColumn>
-        <TableRowColumn>
+        </TableCell>
+        <TableCell>
             <span style={{fontSize: "1.25em"}}>{name}</span>
-        </TableRowColumn>
-        <TableRowColumn>
-            <RaisedButton label="Start" primary={true} disabled={!canStart} style={{margin: "8px"}} onClick={start}/>
-            <RaisedButton label="Stop" secondary={true} disabled={!canStop} style={{margin: "8px"}} onClick={stop}/>
+        </TableCell>
+        <TableCell>
+            <Button variant="contained" color="primary" disabled={!canStart} style={{margin: "0 8px", minWidth: "88px"}} onClick={start}>Start</Button>
+            <Button variant="contained" color="secondary" disabled={!canStop} style={{margin: "0 8px", minWidth: "88px"}} onClick={stop}>Stop</Button>
             {isProgress && <CircularProgress size={40} thickness={7} style={{verticalAlign: "middle"}}/>}
-        </TableRowColumn>
-        <TableRowColumn>{ports.map(it => `${it.protocol}: ${it.number}\n`)}</TableRowColumn>
-        <TableRowColumn>{link}</TableRowColumn>
-        <TableRowColumn>
-            <RaisedButton label="Envs" style={{margin: "8px"}} disabled={true}/>
-            <RaisedButton label="Logs" style={{margin: "8px"}} disabled={true}/>
-        </TableRowColumn>
+        </TableCell>
+        <TableCell>{ports.map(it => `${it.protocol}: ${it.number}\n`)}</TableCell>
+        <TableCell>{link}</TableCell>
+        <TableCell>
+            <Button variant="contained" style={{margin: "0 8px"}} disabled={true}>Envs</Button>
+            <Button variant="contained" style={{margin: "0 8px"}} disabled={true}>Logs</Button>
+        </TableCell>
     </TableRow>
 };
